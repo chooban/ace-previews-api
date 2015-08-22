@@ -1,0 +1,21 @@
+{
+  "name": "previews-server",
+  "version": "0.0.1",
+  "description": "REST service to retrieve Previews catalogue information",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "author": "Ross Hendry (rhendry@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "sinon": "^1.16.1",
+    "supertest": "^1.0.1"
+  }
+}
