@@ -4,13 +4,15 @@
   "description": "REST service to retrieve Previews catalogue information",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "start": "./node_modules/.bin/forever server.js"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
+    "forever": "^0.15.1",
     "parse": "^1.5.0"
   },
   "devDependencies": {
