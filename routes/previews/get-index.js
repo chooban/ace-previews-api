@@ -1,4 +1,4 @@
-var Parse = require("../../lib/parse")();
+var Parse = require("parse").Parse;
 
 module.exports = function(req, res, next) {
   var Previews = Parse.Object.extend("Previews");
