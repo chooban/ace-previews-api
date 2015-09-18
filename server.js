@@ -3,7 +3,7 @@ var express = require("express"),
   rootHandler = require("./routes/index"),
   previewsHandler = require('./routes/previews/rootHandler'),
   bodyParser = require('body-parser'),
-  Parse = require("parse").Parse,
+  Parse = require("parse/node").Parse,
   fs = require("fs")
 
 app.use(bodyParser.urlencoded({

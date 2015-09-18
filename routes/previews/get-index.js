@@ -1,4 +1,4 @@
-var Parse = require("parse").Parse;
+var Parse = require("parse/node").Parse;
 
 module.exports = function(req, res, next) {
   var Previews = Parse.Object.extend("Previews");
