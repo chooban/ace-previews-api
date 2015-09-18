@@ -1,7 +1,7 @@
-var express = require("express"),
-  indexHandler = require("./get-index"),
-  router = express.Router();
+var express = require('express'),
+  indexHandler = require('./get-index'),
+  router = express.Router()
 
-router.get('/', indexHandler);
+router.get('/', indexHandler)
 
-module.exports = router;
+module.exports = router
