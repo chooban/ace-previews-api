@@ -1,5 +1,5 @@
 var express = require('express'),
-  indexHandler = require('./get-index'),
+  indexHandler = require('./previews-get'),
   router = express.Router()
 
 router.get('/', indexHandler)

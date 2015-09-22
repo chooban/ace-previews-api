@@ -2,7 +2,7 @@ var sinon = require("sinon"),
   chai = require("chai"),
   expect = chai.expect;
 
-var getIndex = require("../../routes/get-index.js")
+var getIndex = require("../app/get-index.js")
 
 describe("The route index", function() {
   var req, res, spy;

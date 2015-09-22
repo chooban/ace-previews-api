@@ -4,7 +4,7 @@
   "description": "REST service to retrieve Previews catalogue information",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -R spec",
+    "test": "NODE_ENV=test mocha -R spec",
     "start": "./node_modules/.bin/forever server.js"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
@@ -13,7 +13,9 @@
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "forever": "^0.15.1",
-    "parse": "^1.5.0"
+    "parse": "^1.6.3",
+    "q": "^1.4.1",
+    "winston": "^1.0.1"
   },
   "devDependencies": {
     "chai": "^3.2.0",

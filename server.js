@@ -1,23 +1,18 @@
 var express = require("express"),
   app = express(),
-  rootHandler = require("./routes/index"),
-  previewsHandler = require('./routes/previews/rootHandler'),
   bodyParser = require('body-parser'),
   Parse = require("parse/node").Parse,
-  fs = require("fs")
+  fs = require("fs"),
+  logger = require("winston"),
+  config = require("./config/initializers")(app);
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
-app.use('/', rootHandler);
-app.use('/previews', previewsHandler);
+require("./app/routes")(app);
 
 var config;
 try {
   config = JSON.parse(fs.readFileSync(process.env.KEYS_FILE || "parseKeys.json"));
 } catch(e) {
-  console.log(e);
+  logger.error(e);
   process.exit();
 }
 
@@ -25,7 +20,7 @@ Parse.initialize(config.appKey, config.apiKey)
 
 var server = app.listen(process.env.PORT || 8100, function() {
   var port = server.address().port;
-  console.log("Listening on port " + port);
+  logger.info("Listening on port " + port);
 });
 
 module.exports = server;
