@@ -22,6 +22,7 @@
     "lodash": "^3.10.1",
     "mocha": "^2.2.5",
     "mockery": "^1.4.0",
+    "node-mocks-http": "^1.4.4",
     "sinon": "^1.16.1",
     "supertest": "^1.0.1"
   }
