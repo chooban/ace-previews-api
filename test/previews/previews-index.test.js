@@ -22,7 +22,7 @@ describe("The Previews index route", function() {
     });
     mockery.registerMock('previews/previews', previewsMock);
 
-    getIndex = require("../../app/previews/previews-get");
+    getIndex = require("../../app/previews/previews-get-all");
   })
 
   after(function() {
