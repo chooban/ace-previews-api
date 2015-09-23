@@ -1,7 +1,12 @@
-var express = require('express'),
-  indexHandler = require('./previews-get'),
-  router = express.Router()
+module.exports = function(app) {
 
-router.get('/', indexHandler)
+  var express = require('express')
+  var router = express.Router()
+  var indexHandler = require('./previews-get')
+  var issueRequestHandler = require('./previews-get-issue')
 
-module.exports = router
+  router.get('/', indexHandler)
+  router.get('/:previews_issue', issueRequestHandler)
+
+  return router
+}

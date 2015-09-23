@@ -17,6 +17,24 @@ describe("Loading express", function() {
       .expect(200, done);
   })
 
+  it('responds to a request for previews list', function previewList(done) {
+    request(server)
+      .get('/previews')
+      .expect(200, done)
+  })
+
+  it('responds to a request for an issue of previews', function previewsIssue (done) {
+    request(server)
+      .get('/previews/123')
+      .expect(200, done)
+  })
+
+  it('rejects bad previews issue numbers', function previewsIssue (done) {
+    request(server)
+      .get('/previews/abc')
+      .expect(400, done)
+  })
+
   it("responds with 404 for everything else", function testMissing(done) {
     request(server)
       .get('/foo/bar')

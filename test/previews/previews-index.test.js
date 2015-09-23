@@ -4,7 +4,7 @@ var expect = chai.expect;
 var mockery = require("mockery");
 var Q = require("q");
 
-describe("The route Previews index", function() {
+describe("The Previews index route", function() {
   var req, res, spy, getIndex;
   var responseDeferred = Q.defer();
   var previewsMock = {
@@ -31,7 +31,7 @@ describe("The route Previews index", function() {
 
   it("should respond with a list of catalogues", function(done) {
     responseDeferred.resolve([]);
-    getIndex(req, res).then(function() {
+    getIndex(req, res, function() {
       expect(res.json.calledOnce).to.equal(true);
       done();
     })
