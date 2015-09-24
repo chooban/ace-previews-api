@@ -5,6 +5,9 @@ var Q = require("q")
 describe("Loading express", function() {
   var server
   var previewsMock = {
+    initialize: function() {
+
+    },
     findAll: function() {
       return Q.when([])
     },
@@ -20,6 +23,7 @@ describe("Loading express", function() {
     })
     mockery.enable()
     mockery.registerMock('previews/previews', previewsMock)
+    mockery.registerMock('previews', previewsMock)
   })
 
   after(function() {
