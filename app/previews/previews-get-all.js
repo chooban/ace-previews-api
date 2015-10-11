@@ -4,10 +4,7 @@ var logger = require('winston')
 module.exports = function(req, res, next) {
   Previews.findAll().then(
     function(previews) {
-      var list = previews.map(function(e) {
-        return { issue: e.get('issue') }
-      })
-      res.json(list)
+      res.json(previews)
       next()
     }
     , function(error) {

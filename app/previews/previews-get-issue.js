@@ -4,7 +4,7 @@ module.exports = function(request, response, next) {
   var regex = /\d+/
 
   if (regex.test(issueNumber)) {
-    Previews.find(issueNumber).then(function(data) {
+    Previews.find(Number(issueNumber)).then(function(data) {
       response.json(data)
       next()
     })
