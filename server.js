@@ -9,8 +9,10 @@ require("./app/routes")(app)
 
 var config
 try {
-  config = JSON.parse(fs.readFileSync(process.env.KEYS_FILE || "parseKeys.json"))
-  previews.initialize(config)
+  previews.initialize({
+    appKey: process.env.APP_KEY,
+    apiKey: process.env.API_KEY
+  })
 } catch(e) {
   logger.error(e)
   process.exit()
