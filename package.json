@@ -9,12 +9,13 @@
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
+  "repository": "https://github.com/chooban/libpreviews",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "forever": "^0.15.1",
     "parse": "^1.6.3",
-    "previews": "git+https://55e6f82be5a101b566701c9125d91f37469abbae:x-oauth-basic@github.com/chooban/libpreviews.git",
+    "previews": "chooban/libpreviews#HEAD",
     "q": "^1.4.1",
     "winston": "^1.0.1"
   },
