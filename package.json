@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "jscs": "^3.0.3",
     "lodash": "^3.10.1",
     "mocha": "^2.2.5",
     "mockery": "^1.4.0",
