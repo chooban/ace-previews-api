@@ -1,0 +1,12 @@
+version: '2'
+services:
+  ace_data:
+    image: chooban/ace-data-container
+  web:
+    build: .
+    depends_on:
+      - ace_data
+    volumes_from:
+      - ace_data:ro
+    ports:
+      - 8100:8100

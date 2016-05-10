@@ -1,14 +1,13 @@
-var Previews = require('previews/previews');
 var logger = require('winston');
+var fs = require('fs');
 
 module.exports = function (req, res, next) {
-  Previews.findAll().then(
-    function (previews) {
-      res.json(previews);
-      next();
-    }, function (error) {
-
-      res.status(500).end();
+  fs.readdir('/data/', function filterFiles(err, files) {
+    if (err) {
+      return res.status(500).end();
     }
-  );
+
+    res.json(files);
+    next();
+  });
 };

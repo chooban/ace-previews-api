@@ -6,7 +6,7 @@
   "scripts": {
     "style": "jscs --fix app/ config/ server.js",
     "test": "NODE_ENV=test mocha -R spec",
-    "start": "./node_modules/.bin/forever server.js"
+    "start": "forever server.js"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
