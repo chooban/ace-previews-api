@@ -4,18 +4,17 @@
   "description": "REST service to retrieve Previews catalogue information",
   "main": "server.js",
   "scripts": {
+    "style": "jscs --fix app/ config/ server.js",
     "test": "NODE_ENV=test mocha -R spec",
     "start": "./node_modules/.bin/forever server.js"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
-  "repository": "https://github.com/chooban/libpreviews",
+  "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "forever": "^0.15.1",
-    "parse": "^1.6.3",
-    "previews": "chooban/libpreviews#HEAD",
     "q": "^1.4.1",
     "winston": "^1.0.1"
   },

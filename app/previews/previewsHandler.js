@@ -7,6 +7,7 @@ module.exports = function(app) {
 
   router.get('/', indexHandler)
   router.get('/:previews_issue', issueRequestHandler)
+  router.get('/latest', latestIssueHandler)
 
   return router
 }
