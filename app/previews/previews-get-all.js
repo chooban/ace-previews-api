@@ -7,7 +7,26 @@ module.exports = function (req, res, next) {
     if (err) {
       return next(err);
     }
+    var filteredFiles = files
+                          .filter(isCsv)
+                          .map(removeExtension)
+                          .sort(sortByIssueNumber);
 
-    res.json(files);
+    res.json(filteredFiles);
+
+    function isCsv(filename) {
+      return /ecmail\d+\.csv/.test(filename);
+    }
+
+    function removeExtension(filename) {
+      return filename.match(/\d+/)[0];
+    }
+
+    function sortByIssueNumber(a, b) {
+      var issueA = +a.match(/\d+/)[0];
+      var issueB = +b.match(/\d+/)[0];
+
+      return issueB - issueA;
+    }
   });
 };

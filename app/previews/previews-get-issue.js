@@ -16,17 +16,21 @@ module.exports = function (request, response, next) {
       });
 
       if (matching.length === 1) {
-        fs.readFile('/data/' + matching[0], 'utf8', function (err, contents) {
+        var filename = matching[0];
+        fs.readFile('/data/' + filename, 'utf8', function (err, contents) {
           if (err) {
             return next(err);
           };
 
-          response.send(contents);
+          response.json({
+            'file': filename.split('.')[0],
+            'contents': contents
+          });
         });
       } else {
         return next({
           status: 404,
-          message: "Could not find Previews issue"
+          message: 'Could not find Previews issue'
         });
       }
     });
