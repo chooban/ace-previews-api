@@ -8,7 +8,7 @@ module.exports = function (request, response, next) {
   if (isANumber.test(issueNumber)) {
     fs.readdir('/data/', function (err, files) {
       if (err) {
-        return response.status(500).end();
+        return next(err);
       };
 
       var matching = files.filter(function (file) {
@@ -18,14 +18,16 @@ module.exports = function (request, response, next) {
       if (matching.length === 1) {
         fs.readFile('/data/' + matching[0], 'utf8', function (err, contents) {
           if (err) {
-            return response.status(500).end();
+            return next(err);
           };
 
           response.send(contents);
-          next();
         });
       } else {
-        return response.status(404).end();
+        return next({
+          status: 404,
+          message: "Could not find Previews issue"
+        });
       }
     });
   }
