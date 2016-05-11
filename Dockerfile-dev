@@ -1,9 +1,12 @@
 FROM mhart/alpine-node:4.4.4
 MAINTAINER Ross Hendry "rhendry@googlemail.com"
 
+RUN mkdir -p /opt/apps/previews-service
 ADD . /opt/apps/previews-service
 WORKDIR /opt/apps/previews-service
 
+RUN npm install -g nodemon
 RUN npm install
+
 EXPOSE 8100
-CMD ["npm", "start"]
+CMD ["nodemon", "bin/www"]
