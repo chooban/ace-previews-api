@@ -2,13 +2,12 @@ machine:
   services:
     - docker
   node:
-    version: 0.12.0
+    version: 4.4.4
 
 deployment:
   tutum:
     branch: master
     commands:
-      - docker build -t previews-service .
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD tutum.co
-      - docker tag previews-service tutum.co/$DOCKER_USER/previews-service
-      - docker push tutum.co/$DOCKER_USER/previews-service
+      - docker build -t chooban/previews-service .
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - docker push chooban/previews-service:latest

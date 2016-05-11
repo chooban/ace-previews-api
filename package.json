@@ -2,30 +2,20 @@
   "name": "previews-server",
   "version": "0.0.1",
   "description": "REST service to retrieve Previews catalogue information",
-  "main": "server.js",
+  "main": "bin/www",
   "scripts": {
-    "style": "jscs --fix app/ config/ server.js",
-    "test": "NODE_ENV=test mocha -R spec",
-    "start": "forever server.js"
+    "style": "jscs --fix app/ bin/ server.js",
+    "start": "forever bin/www"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
   "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
-    "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "forever": "^0.15.1",
-    "q": "^1.4.1",
     "winston": "^1.0.1"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
-    "jscs": "^3.0.3",
-    "lodash": "^3.10.1",
-    "mocha": "^2.2.5",
-    "mockery": "^1.4.0",
-    "node-mocks-http": "^1.4.4",
-    "sinon": "^1.16.1",
-    "supertest": "^1.0.1"
+    "jscs": "^3.0.3"
   }
 }
