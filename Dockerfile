@@ -4,6 +4,6 @@ MAINTAINER Ross Hendry "rhendry@googlemail.com"
 ADD . /opt/apps/previews-service
 WORKDIR /opt/apps/previews-service
 
-RUN npm install
+RUN npm install --production
 EXPOSE 8100
 CMD ["npm", "start"]
