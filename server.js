@@ -5,7 +5,7 @@ var previewsRoutes = require('./app/routes/previews');
 
 var app = express();
 app.use(compression());
-app.use('/', previewsRoutes);
+app.use('/previews', previewsRoutes);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
