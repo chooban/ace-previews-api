@@ -1,8 +1,9 @@
 var fs = require('fs');
+var toCsv = require('../util/toCsv');
 
 function getAllFiles(done) {
-  fs.readdir('/data/', function(err, allFiles) {
-    if(err) return done(err);
+  fs.readdir('/data/', function (err, allFiles) {
+    if (err) return done(err);
 
     done(null, allFiles.filter(isCsv));
 
@@ -13,13 +14,13 @@ function getAllFiles(done) {
 }
 
 function getAllIssues(done) {
-  getAllFiles(function(err, files) {
-    if(err) return done(err);
+  getAllFiles(function (err, files) {
+    if (err) return done(err);
 
     var filteredFiles = files
                           .map(removeExtension)
                           .sort(sortByIssueNumber);
-    
+
     done(null, filteredFiles);
   });
 
@@ -38,9 +39,9 @@ function getAllIssues(done) {
 function getSingleIssue(issueNumber, done) {
   var isTheIssue = new RegExp('ecmail' + issueNumber + '\.csv');
 
-  getAllFiles(function(err, allFiles) {
-    if(err) return done(err);
-  
+  getAllFiles(function (err, allFiles) {
+    if (err) return done(err);
+
     var matching = allFiles.filter(function (file) {
       return isTheIssue.test(file);
     });
@@ -48,22 +49,35 @@ function getSingleIssue(issueNumber, done) {
     if (matching.length === 1) {
       var filename = matching[0];
       fs.readFile('/data/' + filename, 'utf8', function (err, contents) {
-        if (err) {
-          return next(err);
-        };
+        if (err) return next(err);
 
+        contents = toJson(toCsv(contents));
         done(null, {
-          'file': filename.split('.')[0],
-          'contents': contents
+          file: filename.split('.')[0],
+          contents: contents,
         });
       });
     } else {
       done(null, null);
     }
   });
+
+  function toJson(csvData) {
+    return csvData.map(toLineItem);
+
+    function toLineItem(rowData) {
+      return {
+        previewsCode: rowData[0],
+        title: rowData[1],
+        price: rowData[3],
+        reducedFrom: rowData[5],
+        publisher: rowData[6],
+      };
+    }
+  }
 }
 
 module.exports = {
   getAllIssues: getAllIssues,
-  getSingleIssue: getSingleIssue
-}
+  getSingleIssue: getSingleIssue,
+};

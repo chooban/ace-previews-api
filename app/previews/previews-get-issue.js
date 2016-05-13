@@ -6,22 +6,22 @@ module.exports = function (request, response, next) {
   var isANumber = /^\d+$/;
 
   if (isANumber.test(issueNumber)) {
-    PreviewsStore.getSingleIssue(issueNumber, function(err, fileData) {
+    PreviewsStore.getSingleIssue(issueNumber, function (err, fileData) {
       if (err) return next(err);
-     
+
       if (fileData) {
         response.json(fileData);
       } else {
         return next({
           status: 404,
-          message: 'Could not find Previews issue ' + issueNumber
+          message: 'Could not find Previews issue ' + issueNumber,
         });
       }
     });
   } else {
     return next({
       status: 400,
-      message: 'Invalid issue number supplied'
+      message: 'Invalid issue number supplied',
     });
   }
 };
