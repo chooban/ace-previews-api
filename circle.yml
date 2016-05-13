@@ -8,6 +8,6 @@ deployment:
   tutum:
     branch: master
     commands:
-      - docker build -t chooban/previews-service .
+      - docker build -t chooban/ace-previews-api .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
-      - docker push chooban/previews-service:latest
+      - docker push chooban/ace-previews-api:latest
