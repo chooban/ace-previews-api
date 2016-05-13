@@ -51,7 +51,7 @@ function getSingleIssue(issueNumber, done) {
       fs.readFile('/data/' + filename, 'utf8', function (err, contents) {
         if (err) return next(err);
 
-        contents = toJson(toCsv(contents));
+        contents = toJson(toCsv(contents)).filter(nonEmpty);
         done(null, {
           file: filename.split('.')[0],
           contents: contents,
@@ -66,14 +66,20 @@ function getSingleIssue(issueNumber, done) {
     return csvData.map(toLineItem);
 
     function toLineItem(rowData) {
+      if (!rowData[0]) return null;
+
       return {
         previewsCode: rowData[0],
         title: rowData[1],
         price: rowData[3],
         reducedFrom: rowData[5],
-        publisher: rowData[6],
+        publisher: rowData[6] ? rowData[6] : 'UNKNOWN',
       };
     }
+  }
+
+  function nonEmpty(f) {
+    return f !== null;
   }
 }
 
