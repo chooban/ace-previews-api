@@ -1,9 +1,12 @@
 'use strict';
 
 const winston = require('winston');
-let configuredTransport = undefined;
+
 winston.emitErrs = true;
+
+let configuredTransport = undefined;
 let logger = undefined;
+
 const logFileTransport = new winston.transports.File({
   level: process.env.LOG_LEVEL || 'info',
   handleExceptions: true,
@@ -13,8 +16,9 @@ const logFileTransport = new winston.transports.File({
   colorize: false,
   handleExceptions: true,
   humanReadableUnhandledException: true,
-  filename: 'magic.log',
+  filename: 'previews-service.log',
 });
+
 const consoleTransport = new winston.transports.Console({
   level: process.env.LOG_LEVEL || 'debug',
   json: false,
@@ -26,6 +30,12 @@ const consoleTransport = new winston.transports.Console({
 if (process.env.NODE_ENV === 'production') {
   logger = new winston.Logger({
     transports: [logFileTransport],
+    exitOnError: false,
+  });
+} else if (process.env.NODE_ENV === 'test') {
+  require('winston-null');
+  logger = new winston.Logger({
+    transports: [new winston.transports.NullTransport()],
     exitOnError: false,
   });
 } else {
