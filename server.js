@@ -1,9 +1,9 @@
-var express = require('express');
-var compression = require('compression');
-var logger = require('./app/util/logger');
-var previewsRoutes = require('./app/routes/previews');
+const express = require('express');
+const compression = require('compression');
+const logger = require('./app/util/logger');
+const previewsRoutes = require('./app/routes/previews');
 
-var app = express();
+const app = express();
 app.use(compression());
 app.use('/previews', previewsRoutes);
 

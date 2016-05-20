@@ -1,8 +1,8 @@
-var fs = require('fs');
-var PreviewsStore = require('../stores/previewsStore');
+const fs = require('fs');
+const PreviewsStore = require('../stores/previewsStore');
 
-module.exports = function (req, res, next) {
-  PreviewsStore.getAllIssues(function (err, files) {
+module.exports = (req, res, next) => {
+  PreviewsStore.getAllIssues((err, files) => {
     if (err) return next(err);
 
     res.json(files);

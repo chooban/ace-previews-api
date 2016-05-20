@@ -1,11 +1,11 @@
-var PreviewsStore = require('../stores/previewsStore');
+const PreviewsStore = require('../stores/previewsStore');
 
-module.exports = function (req, res, next) {
+module.exports = (req, res, next) => {
 
-  PreviewsStore.getAllIssues(function (err, allIssues) {
+  PreviewsStore.getAllIssues((err, allIssues) => {
     if (err) return next(err);
 
-    PreviewsStore.getSingleIssue(allIssues.shift(), function (err, issue) {
+    PreviewsStore.getSingleIssue(allIssues.shift(), (err, issue) => {
       if (err) return next(err);
 
       res.json(issue);

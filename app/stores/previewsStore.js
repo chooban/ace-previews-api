@@ -1,65 +1,53 @@
-var fs = require('fs');
-var parseCsv = require('../util/parseCsv');
+const fs = require('fs');
+const parseCsv = require('../util/parseCsv');
 
 function getAllFiles(done) {
-  fs.readdir('/data/', function (err, allFiles) {
+  const isCsv = (filename) => /ecmail\d+\.csv/.test(filename);
+
+  fs.readdir('/data/', (err, allFiles) => {
     if (err) return done(err);
 
     done(null, allFiles.filter(isCsv));
-
-    function isCsv(filename) {
-      return /ecmail\d+\.csv/.test(filename);
-    }
   });
 }
 
 function getAllIssues(done) {
-  getAllFiles(function (err, files) {
-    if (err) return done(err);
+  const removeExtension = (filename) => filename.match(/\d+/)[0];
 
-    var filteredFiles = files
-                          .map(removeExtension)
-                          .sort(sortByIssueNumber);
-
-    done(null, filteredFiles);
-  });
-
-  function removeExtension(filename) {
-    return filename.match(/\d+/)[0];
-  }
-
-  function sortByIssueNumber(a, b) {
-    var issueA = +a.match(/\d+/)[0];
-    var issueB = +b.match(/\d+/)[0];
+  const sortByIssueNumber = (a, b) => {
+    const issueA = +a.match(/\d+/)[0];
+    const issueB = +b.match(/\d+/)[0];
 
     return issueB - issueA;
   }
+
+  getAllFiles((err, files) => {
+    if (err) return done(err);
+
+    done(null, files.map(removeExtension).sort(sortByIssueNumber));
+  });
 }
 
 function getSingleIssue(issueNumber, done) {
-  var isTheIssue = new RegExp('ecmail' + issueNumber + '\.csv');
+  const isTheIssue = new RegExp('ecmail' + issueNumber + '\.csv');
 
-  getAllFiles(function (err, allFiles) {
+  getAllFiles((err, allFiles) => {
     if (err) return done(err);
 
-    var matching = allFiles.filter(function (file) {
-      return isTheIssue.test(file);
-    });
+    const matching = allFiles.filter((file) => isTheIssue.test(file));
 
-    if (matching.length === 1) {
-      var filename = matching[0];
-      fs.readFile('/data/' + filename, 'utf8', function (err, contents) {
-        if (err) return next(err);
+    if (matching.length != 1) return done();
 
-        contents = toJson(parseCsv(contents)).filter(nonEmpty);
-        done(null, {
-          file: filename.split('.')[0],
-          contents: contents,
-        });
+    const filename = matching[0];
+    fs.readFile('/data/' + filename, 'utf8', (err, contents) => {
+      if (err) return next(err);
+
+      contents = toJson(parseCsv(contents)).filter(nonEmpty);
+      done(null, {
+        file: filename.split('.')[0],
+        contents: contents,
       });
-    } else {
-      done(null, null);
-    }
+    });
   });
 
   function toJson(csvData) {
