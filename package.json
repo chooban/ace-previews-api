@@ -8,7 +8,9 @@
     "start": "forever bin/www",
     "test": "mocha --recursive",
     "unit": "mocha --recursive test/unit",
-    "integration": "mocha --recursive test/integration"
+    "integration": "mocha --recursive test/integration",
+    "coverage": "istanbul cover _mocha --recursive test/unit",
+    "fullcoverage": "istanbul cover _mocha --recursive test/integration"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
@@ -21,6 +23,7 @@
     "winston-null": "^1.0.2"
   },
   "devDependencies": {
+    "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
     "mocha": "^2.4.5",
     "mock-fs": "^3.9.0",
