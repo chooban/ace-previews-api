@@ -1,9 +1,7 @@
-'use strict';
-
 const supertest = require('supertest');
 const should = require('should');
 const mockery = require('mockery');
-const mockPreviewsStore = require('./mocks/previewsStore');
+const mockPreviewsStore = require('../mocks/previewsStore');
 
 describe('Previews controller', () => {
   let server = undefined;
@@ -21,7 +19,7 @@ describe('Previews controller', () => {
 
   beforeEach((done) => {
     process.env.NODE_ENV = 'test';
-    let app = require('../server');
+    let app = require('../../server');
     server = app.listen(3000, done);
   });
 

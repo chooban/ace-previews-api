@@ -1,5 +1,5 @@
 var fs = require('fs');
-var toCsv = require('../util/toCsv');
+var parseCsv = require('../util/parseCsv');
 
 function getAllFiles(done) {
   fs.readdir('/data/', function (err, allFiles) {
@@ -51,7 +51,7 @@ function getSingleIssue(issueNumber, done) {
       fs.readFile('/data/' + filename, 'utf8', function (err, contents) {
         if (err) return next(err);
 
-        contents = toJson(toCsv(contents)).filter(nonEmpty);
+        contents = toJson(parseCsv(contents)).filter(nonEmpty);
         done(null, {
           file: filename.split('.')[0],
           contents: contents,

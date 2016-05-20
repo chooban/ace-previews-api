@@ -6,7 +6,9 @@
   "scripts": {
     "style": "jscs --fix app/ bin/ server.js",
     "start": "forever bin/www",
-    "test": "mocha"
+    "test": "mocha --recursive",
+    "unit": "mocha --recursive test/unit",
+    "integration": "mocha --recursive test/integration"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
@@ -21,6 +23,7 @@
   "devDependencies": {
     "jscs": "^3.0.3",
     "mocha": "^2.4.5",
+    "mock-fs": "^3.9.0",
     "mockery": "^1.7.0",
     "should": "^8.3.2",
     "supertest": "^1.2.0"
