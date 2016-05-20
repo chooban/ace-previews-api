@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:4.4.4
+FROM mhart/alpine-node:5.11.1
 MAINTAINER Ross Hendry "rhendry@googlemail.com"
 
 ADD . /opt/apps/previews-service
