@@ -33,9 +33,8 @@ if (process.env.NODE_ENV === 'production') {
     exitOnError: false,
   });
 } else if (process.env.NODE_ENV === 'test') {
-  require('winston-null');
   logger = new winston.Logger({
-    transports: [new winston.transports.NullTransport()],
+    transports: [new winston.transports.Memory()],
     exitOnError: false,
   });
 } else {
