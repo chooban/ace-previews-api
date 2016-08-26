@@ -5,7 +5,13 @@ function getAllIssues(done) {
 function getSingleIssue(issue, done) {
   done(null, {
     file: 'ecmail' + issue,
-    contents: [ { previewsCode : 'ABC123' } ]
+    contents: [ {
+      previewsCode : 'ABC123',
+      title: 'Spider-man',
+      price: '2.99',
+      reducedFrom: '',
+      publisher: 'Marvel'
+    } ]
   });
 }
 

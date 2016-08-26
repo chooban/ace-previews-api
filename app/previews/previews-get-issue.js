@@ -1,5 +1,6 @@
 const fs = require('fs');
 const PreviewsStore = require('../stores/previewsStore');
+const json2csv = require('json2csv');
 
 module.exports = function (request, response, next) {
   const issueNumber = request.params.previews_issue;
@@ -13,10 +14,26 @@ module.exports = function (request, response, next) {
   }
 
   PreviewsStore.getSingleIssue(issueNumber, (err, fileData) => {
-    console.log("Error from store: " + err);
     if (err) return next(err);
 
     if (fileData) {
+      try {
+        const fields = [
+          'previewsCode',
+          'title',
+          'price',
+          'reducedFrom',
+          'publisher'
+        ];
+        console.log("CSV: " + json2csv({
+          data: fileData.contents,
+          //fields: fields,
+          hasCSVColumnTitle: false
+        }));
+      }
+      catch (err) {
+        console.log(err);
+      }
       response.json(fileData);
     } else {
       return next({
