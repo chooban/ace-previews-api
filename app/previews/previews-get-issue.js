@@ -17,24 +17,24 @@ module.exports = function (request, response, next) {
     if (err) return next(err);
 
     if (fileData) {
-      try {
-        const fields = [
-          'previewsCode',
-          'title',
-          'price',
-          'reducedFrom',
-          'publisher'
-        ];
-        console.log("CSV: " + json2csv({
-          data: fileData.contents,
-          //fields: fields,
-          hasCSVColumnTitle: false
-        }));
-      }
-      catch (err) {
-        console.log(err);
-      }
-      response.json(fileData);
+      response.format({
+        json: () => response.json(fileData),
+        csv: () => {
+          try {
+            response.setHeader('Content-type', 'text/csv');
+            response.setHeader('Content-disposition',
+              `attachment; filename=${fileData.file}`);
+            response.send(json2csv({
+              data: fileData.contents,
+              hasCSVColumnTitle: false
+            }));
+          }
+          catch (err) {
+            console.log(err);
+            next(err);
+          }
+        }
+      });
     } else {
       return next({
         status: 404,
