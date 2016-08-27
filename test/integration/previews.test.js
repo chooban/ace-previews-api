@@ -55,9 +55,22 @@ describe('Previews controller', () => {
       });
   });
 
-  it('Defaults to CSV format if no accept header set', (done) => {
+  it('Defaults to JSON format if no accept header set', (done) => {
     supertest(server)
       .get('/previews/latest')
+      .expect(200)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.headers['content-type'].should.match(/application\/json/);
+        res.body.file.should.eql('ecmail332');
+        res.body.contents.should.have.length(1);
+        done();
+      });
+  });
+
+  it('Allows CSV format request via suffix', (done) => {
+    supertest(server)
+      .get('/previews/latest.csv')
       .expect(200)
       .end((err, res) => {
         res.status.should.equal(200);
@@ -66,6 +79,20 @@ describe('Previews controller', () => {
         done();
       });
   });
+
+  it('Allows JSON format request via suffix', (done) => {
+    supertest(server)
+      .get('/previews/latest')
+      .expect(200)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.headers['content-type'].should.match(/application\/json/);
+        res.body.file.should.eql('ecmail332');
+        res.body.contents.should.have.length(1);
+        done();
+      });
+  });
+
 
   it('Allows retrieving by issue number', (done) => {
     supertest(server)
@@ -83,7 +110,7 @@ describe('Previews controller', () => {
 
   it('Allows retrieving by issue number as CSV', (done) => {
     supertest(server)
-      .get('/previews/330')
+      .get('/previews/330.csv')
       .expect(200)
       .end((err, res) => {
         res.status.should.equal(200);

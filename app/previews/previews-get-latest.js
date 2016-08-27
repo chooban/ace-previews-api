@@ -2,7 +2,6 @@ const PreviewsStore = require('../stores/previewsStore');
 const json2csv = require('json2csv');
 
 module.exports = (req, res, next) => {
-
   PreviewsStore.getAllIssues((err, allIssues) => {
     if (err) return next(err);
 
