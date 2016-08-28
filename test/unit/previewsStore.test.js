@@ -44,10 +44,7 @@ describe('Previews Store', () => {
       response.file.should.equal('ecmail332');
       response.contents.should.have.length(2680);
 
-      // No type safety, so...
-      response.contents.map((d) => {
-        _.keys(d).should.eql(expectedKeys);
-      });
+      response.contents.forEach((d) => _.keys(d).should.eql(expectedKeys));
       done();
     });
   });

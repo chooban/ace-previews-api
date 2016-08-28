@@ -55,7 +55,6 @@ function getSingleIssue(issueNumber, done) {
 
     function toLineItem(rowData) {
       if (!rowData[0]) return null;
-
       return {
         previewsCode: rowData[0],
         title: rowData[1],
