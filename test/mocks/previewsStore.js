@@ -9,9 +9,15 @@ function getSingleIssue(issue, done) {
       previewsCode : 'ABC123',
       title: 'Spider-man',
       price: '2.99',
-      reducedFrom: '',
+      reducedFrom: null,
       publisher: 'Marvel'
-    } ]
+    }, {
+      previewsCode : 'ABC321',
+      title: 'Spider-man',
+      price: '2.99',
+      reducedFrom: '3.50',
+      publisher: 'Marvel'
+    }]
   });
 }
 

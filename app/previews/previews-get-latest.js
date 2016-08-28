@@ -11,12 +11,26 @@ module.exports = (req, res, next) => {
       res.format({
         json: () => res.json(issue),
         csv: () => {
+          const fields = [
+            'previewsCode',
+            'title',
+            'price',
+            {
+              value: (row) => row.reducedFrom !== null
+                  ? 'reduced from'
+                  : ""
+            },
+            'reducedFrom',
+            'publisher'
+          ];
           try {
             res.setHeader('Content-type', 'text/csv');
             res.setHeader('Content-disposition',
-              `attachment; filename=${issue.file}`);
+              `attachment; filename=${issue.file}.csv`);
             res.send(json2csv({
               data: issue.contents,
+              defaultValue: "",
+              fields: fields,
               hasCSVColumnTitle: false
             }));
           }

@@ -50,7 +50,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(1);
+        res.body.contents.should.have.length(2);
         done();
       });
   });
@@ -63,7 +63,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(1);
+        res.body.contents.should.have.length(2);
         done();
       });
   });
@@ -75,7 +75,9 @@ describe('Previews controller', () => {
       .end((err, res) => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/text\/csv/);
-        res.text.should.equal('"ABC123","Spider-man","2.99","","Marvel"');
+        res.headers['content-disposition'].should.equal('attachment; filename=ecmail332.csv');
+        res.text.should.match('"ABC123","Spider-man","2.99","","","Marvel"\n'
+          + '"ABC321","Spider-man","2.99","reduced from","3.50","Marvel"');
         done();
       });
   });
@@ -88,7 +90,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(1);
+        res.body.contents.should.have.length(2);
         done();
       });
   });
@@ -103,7 +105,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail330');
-        res.body.contents.should.have.length(1);
+        res.body.contents.should.have.length(2);
         done();
       });
   });
@@ -115,7 +117,9 @@ describe('Previews controller', () => {
       .end((err, res) => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/text\/csv/);
-        res.text.should.equal('"ABC123","Spider-man","2.99","","Marvel"');
+        res.text.should.match('"ABC123","Spider-man","2.99","","","Marvel"\n'
+          + '"ABC321","Spider-man","2.99","reduced from","3.50","Marvel"');
+        res.headers['content-disposition'].should.equal('attachment; filename=ecmail330.csv');
         done();
       });
   });

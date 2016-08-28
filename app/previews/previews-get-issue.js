@@ -2,8 +2,8 @@ const fs = require('fs');
 const PreviewsStore = require('../stores/previewsStore');
 const json2csv = require('json2csv');
 
-module.exports = function (request, response, next) {
-  const issueNumber = request.params.previews_issue;
+module.exports = function (req, res, next) {
+  const issueNumber = req.params.previews_issue;
   const isANumber = /^\d+$/;
 
   if (!isANumber.test(issueNumber)) {
@@ -17,15 +17,29 @@ module.exports = function (request, response, next) {
     if (err) return next(err);
 
     if (fileData) {
-      response.format({
-        json: () => response.json(fileData),
+      res.format({
+        json: () => res.json(fileData),
         csv: () => {
+          const fields = [
+            'previewsCode',
+            'title',
+            'price',
+            {
+              value: (row) => row.reducedFrom !== null
+                  ? 'reduced from'
+                  : null
+            },
+            'reducedFrom',
+            'publisher'
+          ];
           try {
-            response.setHeader('Content-type', 'text/csv');
-            response.setHeader('Content-disposition',
-              `attachment; filename=${fileData.file}`);
-            response.send(json2csv({
+            res.setHeader('Content-type', 'text/csv');
+            res.setHeader('Content-disposition',
+              `attachment; filename=${fileData.file}.csv`);
+            res.send(json2csv({
               data: fileData.contents,
+              fields: fields,
+              defaultValue: "",
               hasCSVColumnTitle: false
             }));
           }
