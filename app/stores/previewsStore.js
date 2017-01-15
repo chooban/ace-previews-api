@@ -1,5 +1,9 @@
 const fs = require('fs');
+const cheerio = require('cheerio');
+const fetch = require('node-fetch');
+
 const parseCsv = require('../util/parseCsv');
+const logger = require('../util/logger');
 
 function getAllFiles(done) {
   const isCsv = (filename) => /ecmail\d+\.csv/.test(filename);
@@ -19,7 +23,7 @@ function getAllIssues(done) {
     const issueB = +b.match(/\d+/)[0];
 
     return issueB - issueA;
-  }
+  };
 
   getAllFiles((err, files) => {
     if (err) return done(err);
@@ -70,7 +74,54 @@ function getSingleIssue(issueNumber, done) {
   }
 }
 
+function getItemInformation(issueNumber, itemNumber, done) {
+  const urlPrefix = 'https://www.previewsworld.com';
+  const MonthNames = [
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
+  ];
+
+  const codeToUrl = (issue, item) => {
+    const epoch = new Date(1988, 8, 1);
+    epoch.setMonth(epoch.getMonth() + parseInt(issue));
+
+    const slug = MonthNames[epoch.getMonth()] + (epoch.getFullYear() - 2000) + item;
+    const url = `${urlPrefix}/Catalog/${slug}`;
+    logger.log('debug', 'Retrieving from', url);
+    return url;
+  };
+
+  fetch(codeToUrl(issueNumber, itemNumber))
+    .then((response) => response.text())
+    .then((text) => {
+      const $ = cheerio.load(text);
+
+      const coverImage = urlPrefix + $('img#MainContentImage').attr('src');
+
+      const node = $('.CatalogFullDetail .Text');
+      const children = node.contents().filter((i, el) => {
+        return (el.type === 'text'
+          || (el.type === 'tag' && el.tagName === 'br'));
+      });
+      const description = children.toString().trim();
+      const creators = node.children('.Creators')
+        .text()
+        .trim()
+        .replace(/\s\s+/g, ' ');
+
+      return {
+        description,
+        creators,
+        coverImage
+      };
+    })
+    .then((info) => done(null, info))
+    .catch((err) => {
+      throw new Error(err);
+    });
+}
+
 module.exports = {
-  getAllIssues: getAllIssues,
-  getSingleIssue: getSingleIssue,
+  getAllIssues,
+  getSingleIssue,
+  getItemInformation,
 };

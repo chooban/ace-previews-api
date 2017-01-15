@@ -27,10 +27,10 @@ module.exports = function (req, res, next) {
             {
               value: (row) => row.reducedFrom !== null
                   ? 'reduced from'
-                  : null
+                  : null,
             },
             'reducedFrom',
-            'publisher'
+            'publisher',
           ];
           try {
             res.setHeader('Content-type', 'text/csv');
@@ -39,15 +39,15 @@ module.exports = function (req, res, next) {
             res.send(json2csv({
               data: fileData.contents,
               fields: fields,
-              defaultValue: "",
-              hasCSVColumnTitle: false
+              defaultValue: '',
+              hasCSVColumnTitle: false,
             }));
           }
           catch (err) {
             console.log(err);
             next(err);
           }
-        }
+        },
       });
     } else {
       return next({

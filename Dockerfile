@@ -9,4 +9,4 @@ WORKDIR /opt/apps/previews-service
 
 RUN npm install && npm cache clean
 EXPOSE 8100
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

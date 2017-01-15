@@ -18,10 +18,10 @@ module.exports = (req, res, next) => {
             {
               value: (row) => row.reducedFrom !== null
                   ? 'reduced from'
-                  : ""
+                  : '',
             },
             'reducedFrom',
-            'publisher'
+            'publisher',
           ];
           try {
             res.setHeader('Content-type', 'text/csv');
@@ -29,16 +29,16 @@ module.exports = (req, res, next) => {
               `attachment; filename=${issue.file}.csv`);
             res.send(json2csv({
               data: issue.contents,
-              defaultValue: "",
+              defaultValue: '',
               fields: fields,
-              hasCSVColumnTitle: false
+              hasCSVColumnTitle: false,
             }));
           }
           catch (err) {
             console.log(err);
             next(err);
           }
-        }
+        },
       });
     });
   });

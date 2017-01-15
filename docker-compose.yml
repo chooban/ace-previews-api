@@ -1,18 +1,13 @@
 version: '2'
 services:
-  ace_data:
-    image: chooban/ace-data-container
-  web:
+  previewsapi:
     build:
       context: .
       args:
         - env=development
     command: ['npm', 'run', 'devstart']
-    depends_on:
-      - ace_data
-    volumes_from:
-      - ace_data:ro
+    volumes:
+      - './acedata/:/data:ro'
+      - .:/opt/apps/previews-service
     ports:
       - 8100:8100
-    volumes:
-      - .:/opt/apps/previews-service

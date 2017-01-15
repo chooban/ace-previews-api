@@ -7,8 +7,8 @@
     "style": "jscs --fix app/ bin/ server.js",
     "start": "forever bin/www",
     "devstart": "nodemon bin/www",
-    "test": "mocha --recursive",
-    "unit": "mocha --recursive test/unit",
+    "test": "NODE_ENV=test mocha --recursive",
+    "unit": "NODE_ENV=test mocha --recursive test/unit",
     "integration": "mocha --recursive test/integration",
     "coverage": "istanbul cover _mocha --recursive test/unit",
     "fullcoverage": "istanbul cover _mocha --recursive test/integration"
@@ -17,10 +17,12 @@
   "license": "ISC",
   "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
+    "cheerio": "^0.22.0",
     "compression": "^1.6.1",
     "express": "^4.13.3",
-    "forever": "^0.15.1",
+    "forever": "^0.15.3",
     "json2csv": "3.6.3",
+    "node-fetch": "^1.6.3",
     "winston": "^1.0.1"
   },
   "devDependencies": {
