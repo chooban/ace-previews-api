@@ -59,11 +59,14 @@ function getSingleIssue(issueNumber, done) {
 
     function toLineItem(rowData) {
       if (!rowData[0]) return null;
+
+      const price = rowData[3].replace('£','');
+      let reducedFrom = rowData[5] ? rowData[5].replace('£', '') : null;
       return {
         previewsCode: rowData[0],
         title: rowData[1],
-        price: rowData[3],
-        reducedFrom: rowData[5],
+        price,
+        reducedFrom,
         publisher: rowData[6] ? rowData[6] : 'UNKNOWN',
       };
     }

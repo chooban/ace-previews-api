@@ -45,6 +45,14 @@ describe('Previews Store', () => {
       response.contents.should.have.length(2680);
 
       response.contents.forEach((d) => _.keys(d).should.eql(expectedKeys));
+
+      response.contents[0].should.deepEqual({
+        previewsCode: '332/0001',
+        title: 'PREVIEWS #334 JULY 2016',
+        price: '2.00',
+        reducedFrom: null,
+        publisher: 'DIAMOND'
+      });
       done();
     });
   });

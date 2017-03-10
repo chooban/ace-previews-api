@@ -17,22 +17,22 @@
   "license": "ISC",
   "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
-    "cheerio": "^0.22.0",
-    "compression": "^1.6.1",
-    "express": "^4.13.3",
-    "forever": "^0.15.3",
-    "json2csv": "3.6.3",
-    "node-fetch": "^1.6.3",
-    "winston": "^1.0.1"
+    "cheerio": "0.22.0",
+    "compression": "1.6.1",
+    "express": "4.13.3",
+    "forever": "0.15.3",
+    "json2csv": "3.7.3",
+    "node-fetch": "1.6.3",
+    "winston": "2.3.1"
   },
   "devDependencies": {
-    "istanbul": "^0.4.3",
-    "jscs": "^3.0.3",
-    "mocha": "^2.4.5",
-    "mock-fs": "^3.9.0",
-    "mockery": "^1.7.0",
-    "nodemon": "^1.9.2",
-    "should": "^8.3.2",
-    "supertest": "^1.2.0"
+    "istanbul": "0.4.3",
+    "jscs": "3.0.3",
+    "mocha": "3.2.0",
+    "mock-fs": "4.1.0",
+    "mockery": "2.0.0",
+    "nodemon": "1.9.2",
+    "should": "11.2.1",
+    "supertest": "3.0.0"
   }
 }
