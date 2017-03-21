@@ -1,10 +1,8 @@
 const express = require('express');
-const compression = require('compression');
 const logger = require('./app/util/logger');
 const previewsRoutes = require('./app/routes/previews');
 
 const app = express();
-app.use(compression());
 app.use('/previews', previewsRoutes);
 
 // Catch 404 and forward to error handler

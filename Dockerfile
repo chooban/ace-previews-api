@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.1.0
+FROM mhart/alpine-node:6.10.0
 MAINTAINER Ross Hendry "rhendry@googlemail.com"
 
 ARG env=production
