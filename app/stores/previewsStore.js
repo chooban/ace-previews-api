@@ -46,7 +46,7 @@ function getSingleIssue(issueNumber, done) {
     fs.readFile('/data/' + filename, 'utf8', (err, contents) => {
       if (err) return next(err);
 
-      contents = toJson(parseCsv(contents)).filter(nonEmpty);
+      contents = toJson(parseCsv(contents));
       done(null, {
         file: filename.split('.')[0],
         contents: contents,
@@ -55,7 +55,15 @@ function getSingleIssue(issueNumber, done) {
   });
 
   function toJson(csvData) {
-    return csvData.map(toLineItem);
+    return csvData
+      .map(toLineItem)
+      .filter(nonEmpty)
+      .sort((a, b) => {
+        const firstCode = +a.previewsCode.split('/')[1];
+        const secondCode = +b.previewsCode.split('/')[1];
+
+        return firstCode < secondCode ? -1 : 1;
+      });
 
     function toLineItem(rowData) {
       if (!rowData[0]) return null;
