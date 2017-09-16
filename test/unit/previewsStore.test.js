@@ -6,28 +6,38 @@ const previewsStore = require('../../app/stores/previewsStore');
 const _ = require('lodash');
 
 describe('Previews Store', () => {
-  before(function() {
+
+  beforeEach(function() {
     mockFs({
       '/data/': {
         'ecmail333.csv': '',
         'ecmail332.csv': ecmail332,
         'ecmail334.csv': '',
         'ecmail347.csv': ecmail347,
+        'ecmail999.csv': 'not a valid\nfile:545',
         'Thumbs.db': ''
       }
     });
   });
 
-  after(function() {
+  afterEach(function() {
     mockFs.restore();
+  });
+
+  afterEach(function() {
+    if (this.currentTest.state === 'failed') {
+      var logger = require('../../app/util/logger');
+      console.log(logger.transports.memory.errorOutput);
+      logger.transports.memory.clearLogs();
+    }
   });
 
   it('getAllIssues should return an ordered list of CSVs', function(done) {
     previewsStore.getAllIssues((err, list) => {
       if (err) return done(err);
 
-      list.should.have.length(4);
-      list.should.eql(['347', '334', '333', '332']);
+      list.should.have.length(5);
+      list.should.eql(['999', '347', '334', '333', '332']);
       done();
     });
   });
@@ -73,6 +83,15 @@ describe('Previews Store', () => {
         reducedFrom: null,
         publisher: 'DIAMOND PUBLICATIONS'
       });
+      done();
+    });
+  });
+
+  it('should throw an error on unparseable files', function(done) {
+    previewsStore.getSingleIssue(999, (err, response) => {
+      if (!err) return done('No error thrown');
+
+      should.exist(err);
       done();
     });
   });

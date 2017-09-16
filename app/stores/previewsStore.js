@@ -4,11 +4,12 @@ const fetch = require('node-fetch');
 
 const parseCsv = require('../util/parseCsv');
 const logger = require('../util/logger');
+const config = require('../util/config');
 
 function getAllFiles(done) {
   const isCsv = (filename) => /ecmail\d+\.csv/.test(filename);
 
-  fs.readdir('/data/', (err, allFiles) => {
+  fs.readdir(config.dataDirectory(), (err, allFiles) => {
     if (err) return done(err);
 
     done(null, allFiles.filter(isCsv));
@@ -43,14 +44,21 @@ function getSingleIssue(issueNumber, done) {
     if (matching.length != 1) return done();
 
     const filename = matching[0];
-    fs.readFile('/data/' + filename, 'utf8', (err, contents) => {
-      if (err) return next(err);
+    fs.readFile(config.dataDirectory() + filename, 'utf8', (err, contents) => {
+      if (err) {
+        logger.log('error', err);
+        return done(err);
+      }
 
-      contents = toJson(parseCsv(contents));
-      done(null, {
-        file: filename.split('.')[0],
-        contents: contents,
-      });
+      try {
+        const parsedContents = toJson(parseCsv(contents));
+        done(null, {
+          file: filename.split('.')[0],
+          contents: parsedContents,
+        });
+      } catch (e) {
+        done(e);
+      }
     });
   });
 
@@ -66,7 +74,18 @@ function getSingleIssue(issueNumber, done) {
       });
 
     function toLineItem(rowData) {
+      // Sometimes we get empty rows at the end of a file
       if (!rowData[0]) return null;
+
+      // Need at least a code, price and title
+      const requiredFields = [0, 1, 3];
+
+      requiredFields.forEach(idx => {
+        if (!rowData[idx]) {
+          logger.log('error', `Could not read: ${rowData}`);
+          throw new Error('Incomplete data');
+        }
+      });
 
       const price = rowData[3].replace('£','');
       let reducedFrom = rowData[5] ? rowData[5].replace('£', '') : null;

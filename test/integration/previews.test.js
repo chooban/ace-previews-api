@@ -1,24 +1,13 @@
 const supertest = require('supertest');
 const should = require('should');
 const mockery = require('mockery');
-const mockPreviewsStore = require('../mocks/previewsStore');
 
 describe('Previews controller', () => {
   let server = undefined;
   let agent = undefined;
 
-  before(() => {
-    mockery.enable({
-      warnOnReplace: false,
-      warnOnUnregistered: false
-    });
-    mockery.registerMock('../stores/previewsStore', mockPreviewsStore);
-  });
-
-  after(() => mockery.disable());
-
   beforeEach((done) => {
-    process.env.NODE_ENV = 'test';
+    process.env.DATA_DIR = './acedata/';
     let app = require('../../server');
     server = app.listen(3000, done);
   });
@@ -26,6 +15,15 @@ describe('Previews controller', () => {
   afterEach(() => {
     server.close();
     server = null;
+    delete process.env.DATA_DIR;
+  });
+
+  afterEach(function() {
+    if (this.currentTest.state === 'failed') {
+      var logger = require('../../app/util/logger');
+      console.log(logger.transports.memory.errorOutput);
+      logger.transports.memory.clearLogs();
+    }
   });
 
   it('Returns a list from the root', (done) => {
@@ -35,8 +33,8 @@ describe('Previews controller', () => {
       .expect(200)
       .end((err, res) => {
         res.status.should.equal(200);
-        res.body.should.have.length(3);
-        res.body.should.eql([332,331,330]);
+        res.body.should.have.length(4);
+        res.body.should.eql(['332','331','330','100']);
         done();
       });
   });
@@ -50,7 +48,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(2);
+        res.body.contents.should.have.length(2680);
         done();
       });
   });
@@ -63,7 +61,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(2);
+        res.body.contents.should.have.length(2680);
         done();
       });
   });
@@ -76,8 +74,6 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/text\/csv/);
         res.headers['content-disposition'].should.equal('attachment; filename=ecmail332.csv');
-        res.text.should.match('"ABC123","Spider-man","2.99","","","Marvel"\n'
-          + '"ABC321","Spider-man","2.99","reduced from","3.50","Marvel"');
         done();
       });
   });
@@ -90,7 +86,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail332');
-        res.body.contents.should.have.length(2);
+        res.body.contents.should.have.length(2680);
         done();
       });
   });
@@ -105,7 +101,7 @@ describe('Previews controller', () => {
         res.status.should.equal(200);
         res.headers['content-type'].should.match(/application\/json/);
         res.body.file.should.eql('ecmail330');
-        res.body.contents.should.have.length(2);
+        res.body.contents.should.have.length(2413);
         done();
       });
   });
@@ -115,11 +111,7 @@ describe('Previews controller', () => {
       .get('/previews/330.csv')
       .expect(200)
       .end((err, res) => {
-        res.status.should.equal(200);
         res.headers['content-type'].should.match(/text\/csv/);
-        res.text.should.match('"ABC123","Spider-man","2.99","","","Marvel"\n'
-          + '"ABC321","Spider-man","2.99","reduced from","3.50","Marvel"');
-        res.headers['content-disposition'].should.equal('attachment; filename=ecmail330.csv');
         done();
       });
   });
@@ -142,5 +134,15 @@ describe('Previews controller', () => {
       .post('/previews/332')
       .set('Accept', 'application/json')
       .expect(404, done);
+  });
+
+  it('Returns a 500 for an unreadable file', (done) => {
+    supertest(server)
+      .get('/previews/100')
+      .expect(500)
+      .end((err, res) => {
+        res.status.should.equal(500);
+        done();
+      });
   });
 });
