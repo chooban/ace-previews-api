@@ -1,3 +1,3 @@
-# Previews Service
+# Previews Backend
 
-Lists available CSV files for Previews.
+The backend for the [frontend](https://github.com/chooban/react-ace). 
