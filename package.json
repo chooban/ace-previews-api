@@ -17,10 +17,12 @@
   "license": "ISC",
   "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "cheerio": "0.22.0",
     "express": "4.13.3",
     "json2csv": "3.7.3",
     "node-fetch": "1.6.3",
+    "sprintf": "^0.1.5",
     "winston": "2.3.1"
   },
   "devDependencies": {
