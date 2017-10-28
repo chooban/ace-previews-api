@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 const dataDirectory = () => process.env.DATA_DIR || '/data/';
 
 const clientIdPath = '/run/secrets/auth0_client_id';

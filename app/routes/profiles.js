@@ -4,6 +4,7 @@ const querystring = require('querystring');
 const jwt = require('express-jwt');
 
 const config = require('../util/auth0-config');
+
 const jwtCheck = jwt({
   secret: config.secret,
   audience: config.audience
@@ -32,7 +33,8 @@ const updateSearches = (req, res, next) => {
     .catch(next);
 };
 
-router.post('/savedsearches',
+router.post(
+  '/savedsearches',
   jwtCheck,
   updateSearches
 );

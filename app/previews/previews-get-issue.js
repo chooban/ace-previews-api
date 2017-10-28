@@ -1,15 +1,14 @@
-const fs = require('fs');
 const PreviewsStore = require('../stores/previewsStore');
 const json2csv = require('json2csv');
 
-module.exports = function (req, res, next) {
+module.exports = (req, res, next) => {
   const issueNumber = req.params.previews_issue;
   const isANumber = /^\d+$/;
 
   if (!isANumber.test(issueNumber)) {
     return next({
       status: 400,
-      message: 'Invalid issue number supplied',
+      message: 'Invalid issue number supplied'
     });
   }
 
@@ -19,7 +18,7 @@ module.exports = function (req, res, next) {
     if (!fileData) {
       return next({
         status: 404,
-        message: 'Could not find Previews issue ' + issueNumber,
+        message: `Could not find Previews issue ${issueNumber}`
       });
     }
 
@@ -31,29 +30,31 @@ module.exports = function (req, res, next) {
           'title',
           'price',
           {
-            value: (row) => row.reducedFrom !== null
-                ? 'reduced from'
-                : null,
+            value: (row) => (row.reducedFrom !== null
+              ? 'reduced from'
+              : null)
           },
           'reducedFrom',
-          'publisher',
+          'publisher'
         ];
         try {
           res.setHeader('Content-type', 'text/csv');
-          res.setHeader('Content-disposition',
-            `attachment; filename=${fileData.file}.csv`);
+          res.setHeader(
+            'Content-disposition',
+            `attachment; filename=${fileData.file}.csv`
+          );
           res.send(json2csv({
             data: fileData.contents,
-            fields: fields,
+            fields,
             defaultValue: '',
-            hasCSVColumnTitle: false,
+            hasCSVColumnTitle: false
           }));
+        } catch (e) {
+          next(e);
         }
-        catch (err) {
-          console.log(err);
-          next(err);
-        }
-      },
+      }
     });
+    return undefined;
   });
+  return undefined;
 };

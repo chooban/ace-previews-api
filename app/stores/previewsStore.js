@@ -10,9 +10,11 @@ function getAllFiles(done) {
   const isCsv = (filename) => /ecmail\d+\.csv/.test(filename);
 
   fs.readdir(config.dataDirectory(), (err, allFiles) => {
-    if (err) return done(err);
-
-    done(null, allFiles.filter(isCsv));
+    if (err) {
+      done(err);
+    } else {
+      done(null, allFiles.filter(isCsv));
+    }
   });
 }
 
@@ -27,39 +29,45 @@ function getAllIssues(done) {
   };
 
   getAllFiles((err, files) => {
-    if (err) return done(err);
-
-    done(null, files.map(removeExtension).sort(sortByIssueNumber));
+    if (err) {
+      done(err);
+    } else {
+      done(null, files.map(removeExtension).sort(sortByIssueNumber));
+    }
   });
 }
 
 function getSingleIssue(issueNumber, done) {
-  const isTheIssue = new RegExp('ecmail' + issueNumber + '\.csv');
+  const isTheIssue = new RegExp(`ecmail${issueNumber}.csv`);
 
   getAllFiles((err, allFiles) => {
-    if (err) return done(err);
+    if (err) {
+      done(err);
+    } else {
+      const matching = allFiles.filter((file) => isTheIssue.test(file));
 
-    const matching = allFiles.filter((file) => isTheIssue.test(file));
+      if (matching.length !== 1) {
+        done();
+      } else {
+        const filename = matching[0];
+        fs.readFile(config.dataDirectory() + filename, 'utf8', (fileErr, contents) => {
+          if (fileErr) {
+            logger.log('error', fileErr);
+            done(fileErr);
+          }
 
-    if (matching.length != 1) return done();
-
-    const filename = matching[0];
-    fs.readFile(config.dataDirectory() + filename, 'utf8', (err, contents) => {
-      if (err) {
-        logger.log('error', err);
-        return done(err);
-      }
-
-      try {
-        const parsedContents = toJson(parseCsv(contents));
-        done(null, {
-          file: filename.split('.')[0],
-          contents: parsedContents,
+          try {
+            const parsedContents = toJson(parseCsv(contents));
+            done(null, {
+              file: filename.split('.')[0],
+              contents: parsedContents
+            });
+          } catch (e) {
+            done(e);
+          }
         });
-      } catch (e) {
-        done(e);
       }
-    });
+    }
   });
 
   function toJson(csvData) {
@@ -80,21 +88,21 @@ function getSingleIssue(issueNumber, done) {
       // Need at least a code, price and title
       const requiredFields = [0, 1, 3];
 
-      requiredFields.forEach(idx => {
+      requiredFields.forEach((idx) => {
         if (!rowData[idx]) {
           logger.log('error', `Could not read: ${rowData}`);
           throw new Error('Incomplete data');
         }
       });
 
-      const price = rowData[3].replace('£','');
-      let reducedFrom = rowData[5] ? rowData[5].replace('£', '') : null;
+      const price = rowData[3].replace('£', '');
+      const reducedFrom = rowData[5] ? rowData[5].replace('£', '') : null;
       return {
         previewsCode: rowData[0],
         title: rowData[1],
         price,
         reducedFrom,
-        publisher: rowData[6] ? rowData[6] : 'UNKNOWN',
+        publisher: rowData[6] ? rowData[6] : 'UNKNOWN'
       };
     }
   }
@@ -107,12 +115,12 @@ function getSingleIssue(issueNumber, done) {
 function getItemInformation(issueNumber, itemNumber, done) {
   const urlPrefix = 'https://www.previewsworld.com';
   const MonthNames = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
   ];
 
   const codeToUrl = (issue, item) => {
     const epoch = new Date(1988, 8, 1);
-    epoch.setMonth(epoch.getMonth() + parseInt(issue));
+    epoch.setMonth(epoch.getMonth() + parseInt(issue, 10));
 
     const slug = MonthNames[epoch.getMonth()] + (epoch.getFullYear() - 2000) + item;
     const url = `${urlPrefix}/Catalog/${slug}`;
@@ -128,10 +136,9 @@ function getItemInformation(issueNumber, itemNumber, done) {
       const coverImage = urlPrefix + $('img#MainContentImage').attr('src');
 
       const node = $('.CatalogFullDetail .Text');
-      const children = node.contents().filter((i, el) => {
-        return (el.type === 'text'
-          || (el.type === 'tag' && el.tagName === 'br'));
-      });
+      const children = node.contents().filter((i, el) => (
+        el.type === 'text' || (el.type === 'tag' && el.tagName === 'br')
+      ));
       const description = children.toString().trim();
       const creators = node.children('.Creators')
         .text()
@@ -153,5 +160,5 @@ function getItemInformation(issueNumber, itemNumber, done) {
 module.exports = {
   getAllIssues,
   getSingleIssue,
-  getItemInformation,
+  getItemInformation
 };

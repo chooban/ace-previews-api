@@ -1,4 +1,3 @@
-const fs = require('fs');
 const PreviewsStore = require('../stores/previewsStore');
 
 module.exports = (req, res, next) => {
@@ -6,5 +5,6 @@ module.exports = (req, res, next) => {
     if (err) return next(err);
 
     res.json(files);
+    return undefined;
   });
 };

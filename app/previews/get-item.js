@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
 
   if (!isANumber.test(issueNumber)) {
     return next({
-      status: 400,
+      status: 400
     });
   }
 
@@ -17,13 +17,15 @@ module.exports = (req, res, next) => {
 
     if (data) {
       res.format({
-        json: () => res.json(data),
+        json: () => res.json(data)
       });
     } else {
       return next({
         status: 404,
-        message: 'Could not find item info',
+        message: 'Could not find item info'
       });
     }
+    return undefined;
   });
+  return undefined;
 };
