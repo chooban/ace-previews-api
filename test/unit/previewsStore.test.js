@@ -27,7 +27,7 @@ describe('Previews Store', () => {
   afterEach(function() {
     if (this.currentTest.state === 'failed') {
       var logger = require('../../app/util/logger');
-      console.log(logger.transports.memory.errorOutput);
+      console.log("Logger output:" + logger.transports.memory.errorOutput);
       logger.transports.memory.clearLogs();
     }
   });

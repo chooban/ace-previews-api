@@ -2346,10 +2346,6 @@ mock-fs@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.1.0.tgz#9c0a5c63ce9261894c5824645baaf95abe163e5e"
 
-mockery@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/mockery/-/mockery-2.0.0.tgz#0569a11a1848461fdc347cf8cca2df2f3129bc03"
-
 moment@2.x.x:
   version "2.19.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.1.tgz#56da1a2d1cbf01d38b7e1afc31c10bcfa1929167"

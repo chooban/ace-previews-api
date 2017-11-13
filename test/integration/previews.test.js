@@ -1,14 +1,12 @@
 const supertest = require('supertest');
 const should = require('should');
-const mockery = require('mockery');
 
 describe('Previews controller', () => {
   let server = undefined;
-  let agent = undefined;
 
   beforeEach((done) => {
     process.env.DATA_DIR = './acedata/';
-    let app = require('../../server');
+    const app = require('../../server');
     server = app.listen(3000, done);
   });
 

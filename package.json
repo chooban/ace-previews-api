@@ -10,8 +10,8 @@
     "test": "NODE_ENV=test mocha --recursive",
     "unit": "NODE_ENV=test mocha --recursive test/unit",
     "integration": "mocha --recursive test/integration",
-    "coverage": "istanbul cover _mocha --recursive test/unit",
-    "fullcoverage": "istanbul cover _mocha --recursive test/integration"
+    "coverage": "NODE_ENV=test istanbul cover _mocha --recursive test/unit",
+    "fullcoverage": "NODE_ENV=test istanbul cover _mocha --recursive test/integration"
   },
   "author": "Ross Hendry (rhendry@gmail.com)",
   "license": "ISC",
@@ -39,7 +39,6 @@
     "jscs": "3.0.3",
     "mocha": "3.2.0",
     "mock-fs": "4.1.0",
-    "mockery": "2.0.0",
     "nodemon": "1.9.2",
     "should": "11.2.1",
     "supertest": "3.0.0"
