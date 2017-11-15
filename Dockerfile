@@ -7,6 +7,6 @@ ENV NODE_ENV=${env}
 ADD . /opt/apps/previews-service
 WORKDIR /opt/apps/previews-service
 
-RUN npm install && npm cache clean
+RUN yarn install && yarn cache clean
 EXPOSE 8100
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]

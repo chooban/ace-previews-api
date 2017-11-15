@@ -3,4 +3,5 @@
 !bin/
 !server.js
 !package.json
+!yarn.lock
 !README.md
