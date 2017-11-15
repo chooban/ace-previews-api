@@ -18,16 +18,16 @@
   "repository": "https://github.com/chooban/previews-server",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "cheerio": "0.22.0",
-    "express": "4.13.3",
+    "cheerio": "^0.22.0",
+    "express": "^4.13.3",
     "express-jwt": "^5.3.0",
     "json2csv": "^3.11.5",
-    "node-fetch": "1.6.3",
+    "node-fetch": "^1.6.3",
     "querystring": "^0.2.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sprintf": "^0.1.5",
-    "winston": "2.3.1"
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "eslint": "^4.10.0",
@@ -35,12 +35,12 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
-    "istanbul": "0.4.3",
-    "jscs": "3.0.3",
-    "mocha": "3.2.0",
-    "mock-fs": "4.1.0",
-    "nodemon": "1.9.2",
-    "should": "11.2.1",
-    "supertest": "3.0.0"
+    "istanbul": "^0.4.3",
+    "jscs": "^3.0.3",
+    "mocha": "^3.2.0",
+    "mock-fs": "^4.1.0",
+    "nodemon": "^1.9.2",
+    "should": "^11.2.1",
+    "supertest": "^3.0.0"
   }
 }
