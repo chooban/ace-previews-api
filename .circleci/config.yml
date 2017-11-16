@@ -19,5 +19,5 @@ jobs:
       - run: |
           TAG=latest
           docker build -t chooban/ace-previews-api:$TAG .
-          docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push chooban/ace-previews-api:$TAG
