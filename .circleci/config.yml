@@ -14,3 +14,10 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn test
+      - setup_remote_docker:
+          version: 17.03.0-ce
+      - run: |
+          TAG=latest
+          docker build -t chooban/ace-previews-api:$TAG .
+          docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker push chooban/ace-previews-api:$TAG
