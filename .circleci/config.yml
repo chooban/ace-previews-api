@@ -14,10 +14,28 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn test
+  docker_image:
+    docker:
+      - image: circleci/node:8.9.1
+    working_directory: ~/app
+    steps:
       - setup_remote_docker:
           version: 17.03.0-ce
+      - checkout
+      - run: yarn install
       - run: |
           TAG=latest
           docker build -t chooban/ace-previews-api:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push chooban/ace-previews-api:$TAG
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - docker_image:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
