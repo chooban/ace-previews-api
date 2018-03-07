@@ -1,6 +1,6 @@
 {
   "name": "previews-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "REST service to retrieve Previews catalogue information",
   "main": "bin/www",
   "scripts": {
