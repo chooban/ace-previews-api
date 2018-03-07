@@ -60,10 +60,17 @@ function getSingleIssue(issueNumber, done) {
 
           try {
             const parsedContents = toJson(parseCsv(contents));
-            done(null, {
-              file: filename.split('.')[0],
-              contents: parsedContents
-            });
+            if (parsedContents.length > 0) {
+              done(null, {
+                file: filename.split('.')[0],
+                contents: parsedContents
+              });
+            } else {
+              // If we got this far then there was a file but none of it was readable
+              // as a good row.
+              logger.log('error', `Could not parse CSV: ${filename}`);
+              done(new Error('Could not read file'));
+            }
           } catch (e) {
             logger.log('error', `Could not parse CSV: ${e}`);
             done(e);
@@ -86,17 +93,7 @@ function getSingleIssue(issueNumber, done) {
 
     function toLineItem(rowData) {
       // Sometimes we get empty rows at the end of a file
-      if (!rowData[0]) return null;
-
-      // Need at least a code, price and title
-      const requiredFields = [0, 1, 3];
-
-      requiredFields.forEach((idx) => {
-        if (!rowData[idx]) {
-          logger.log('error', `Could not read: ${rowData}`);
-          throw new Error('Incomplete data');
-        }
-      });
+      if (!(rowData[0] && hasMinimumFields(rowData))) return null;
 
       const price = rowData[3].replace('£', '');
       const reducedFrom = rowData[5] ? rowData[5].replace('£', '') : null;
@@ -107,6 +104,15 @@ function getSingleIssue(issueNumber, done) {
         reducedFrom,
         publisher: rowData[6] ? rowData[6] : 'UNKNOWN'
       };
+    }
+
+    function hasMinimumFields(rowData) {
+      // Need at least a code, price and title
+      const requiredFields = [0, 1, 3];
+      const valid = requiredFields.reduce((v, idx) => v && rowData[idx], true);
+      logger.log('info', `${rowData} is ${valid ? '' : 'not '} valid`);
+
+      return valid;
     }
   }
 

@@ -4,7 +4,7 @@
   "description": "REST service to retrieve Previews catalogue information",
   "main": "bin/www",
   "scripts": {
-    "style": "eslint app/ bin/ server.js",
+    "style": "eslint app/ bin/ test/ server.js",
     "start": "node ./bin/www",
     "devstart": "NODE_ENV=test DATA_DIR=./acedata/ nodemon bin/www",
     "test": "NODE_ENV=test mocha --recursive",
@@ -37,6 +37,7 @@
     "eslint-plugin-react": "^7.4.0",
     "eslint_d": "^5.2.2",
     "istanbul": "^0.4.3",
+    "lodash": "^4.17.5",
     "mocha": "^5.0.3",
     "mock-fs": "^4.1.0",
     "nodemon": "^1.9.2",

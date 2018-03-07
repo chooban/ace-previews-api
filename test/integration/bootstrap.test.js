@@ -55,5 +55,4 @@ describe('Bootstrap controller with secrets', () => {
         clientId: 'client_id'
       }, done);
   });
-
 });

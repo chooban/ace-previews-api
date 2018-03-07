@@ -1,4 +1,6 @@
+/* eslint-disable consistent-return, no-console */
 const should = require('should');
+const ecmail330 = require('fs').readFileSync('test/unit/data/ecmail330.csv', 'utf8');
 const ecmail332 = require('fs').readFileSync('test/unit/data/ecmail332.csv', 'utf8');
 const ecmail347 = require('fs').readFileSync('test/unit/data/ecmail347.csv', 'utf8');
 const mockFs = require('mock-fs');
@@ -6,10 +8,10 @@ const previewsStore = require('../../app/stores/previewsStore');
 const _ = require('lodash');
 
 describe('Previews Store', () => {
-
-  beforeEach(function() {
+  beforeEach(() => {
     mockFs({
       '/data/': {
+        'ecmail330.csv': ecmail330,
         'ecmail333.csv': '',
         'ecmail332.csv': ecmail332,
         'ecmail334.csv': '',
@@ -20,29 +22,29 @@ describe('Previews Store', () => {
     });
   });
 
-  afterEach(function() {
+  afterEach(() => {
     mockFs.restore();
   });
 
-  afterEach(function() {
+  afterEach(function logIfFailed() {
     if (this.currentTest.state === 'failed') {
-      var logger = require('../../app/util/logger');
-      console.log("Logger output:" + logger.transports.memory.errorOutput);
+      // eslint-disable-next-line
+      const logger = require('../../app/util/logger');
+      console.log(`Logger output: ${logger.transports.memory.errorOutput}`);
       logger.transports.memory.clearLogs();
     }
   });
 
-  it('getAllIssues should return an ordered list of CSVs', function(done) {
+  it('getAllIssues should return an ordered list of CSVs', (done) => {
     previewsStore.getAllIssues((err, list) => {
       if (err) return done(err);
 
-      list.should.have.length(5);
-      list.should.eql(['999', '347', '334', '333', '332']);
+      list.should.eql(['999', '347', '334', '333', '332', '330']);
       done();
     });
   });
 
-  it('getSingleIssue should return JSON object', function(done) {
+  it('getSingleIssue should return JSON object', (done) => {
     const expectedKeys = [
       'previewsCode',
       'title',
@@ -69,7 +71,7 @@ describe('Previews Store', () => {
     });
   });
 
-  it('should sort rows', function(done) {
+  it('should sort rows', (done) => {
     previewsStore.getSingleIssue(347, (err, response) => {
       if (err) return done(err);
 
@@ -87,11 +89,22 @@ describe('Previews Store', () => {
     });
   });
 
-  it('should throw an error on unparseable files', function(done) {
+  it('should throw an error on unparseable files', (done) => {
     previewsStore.getSingleIssue(999, (err, response) => {
       if (!err) return done('No error thrown');
 
       should.exist(err);
+      should.not.exist(response);
+      done();
+    });
+  });
+
+  it('should cope with empty price fields and pound symbols', (done) => {
+    previewsStore.getSingleIssue(330, (err, response) => {
+      if (err) return done(err);
+
+      should.not.exist(err);
+      response.contents.should.have.length(2);
       done();
     });
   });

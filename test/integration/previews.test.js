@@ -1,3 +1,4 @@
+/* eslint-disable global-require, no-console */
 const supertest = require('supertest');
 
 describe('Previews controller', () => {
@@ -5,7 +6,6 @@ describe('Previews controller', () => {
 
   beforeEach((done) => {
     process.env.DATA_DIR = './acedata/';
-    // eslint-disable-next-line
     const app = require('../../server');
     server = app.listen(0, done);
   });
@@ -18,9 +18,7 @@ describe('Previews controller', () => {
 
   afterEach(function logFailures() {
     if (this.currentTest.state === 'failed') {
-      // eslint-disable-next-line
-      let logger = require('../../app/util/logger');
-      // eslint-disable-next-line
+      const logger = require('../../app/util/logger');
       console.log(logger.transports.memory.errorOutput);
       logger.transports.memory.clearLogs();
     }
