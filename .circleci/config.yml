@@ -29,7 +29,7 @@ jobs:
       - run: |
           git config --global user.email "rhendry@googlemail.com"
           git config --global user.name "CircleCI"
-          TAG=$(npm version patch)
+          TAG=$(npm version patch -m "[ci skip]")
           docker build -t chooban/ace-previews-api:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push chooban/ace-previews-api:$TAG
