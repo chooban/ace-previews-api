@@ -27,6 +27,8 @@ jobs:
       - checkout
       - run: yarn install
       - run: |
+          git config --global user.email "rhendry@googlemail.com"
+          git config --global user.name "CircleCI"
           TAG=$(npm version patch)
           docker build -t chooban/ace-previews-api:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
