@@ -11,6 +11,7 @@ function getAllFiles(done) {
 
   fs.readdir(config.dataDirectory(), (err, allFiles) => {
     if (err) {
+      logger.log('error', `Could not read directory, ${config.dataDirectory()}: ${err}`);
       done(err);
     } else {
       done(null, allFiles.filter(isCsv));
@@ -47,12 +48,13 @@ function getSingleIssue(issueNumber, done) {
       const matching = allFiles.filter((file) => isTheIssue.test(file));
 
       if (matching.length !== 1) {
+        logger.log('warning', `No file for ${issueNumber}`);
         done();
       } else {
         const filename = matching[0];
         fs.readFile(config.dataDirectory() + filename, 'utf8', (fileErr, contents) => {
           if (fileErr) {
-            logger.log('error', fileErr);
+            logger.log('error', `Error attempting to read ${filename}: ${fileErr}`);
             done(fileErr);
           }
 
@@ -63,6 +65,7 @@ function getSingleIssue(issueNumber, done) {
               contents: parsedContents
             });
           } catch (e) {
+            logger.log('error', `Could not parse CSV: ${e}`);
             done(e);
           }
         });

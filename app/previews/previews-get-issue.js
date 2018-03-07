@@ -1,5 +1,6 @@
 const PreviewsStore = require('../stores/previewsStore');
 const json2csv = require('json2csv');
+const logger = require('../util/logger');
 
 module.exports = (req, res, next) => {
   const issueNumber = req.params.previews_issue;
@@ -16,10 +17,9 @@ module.exports = (req, res, next) => {
     if (err) return next(err);
 
     if (!fileData) {
-      return next({
-        status: 404,
-        message: `Could not find Previews issue ${issueNumber}`
-      });
+      logger.log('error', `Request for unknown issue: ${issueNumber}`);
+      res.sendStatus(404);
+      return next();
     }
 
     res.format({
@@ -29,11 +29,7 @@ module.exports = (req, res, next) => {
           'previewsCode',
           'title',
           'price',
-          {
-            value: (row) => (row.reducedFrom !== null
-              ? 'reduced from'
-              : null)
-          },
+          { value: (row) => (row.reducedFrom !== null ? 'reduced from' : null) },
           'reducedFrom',
           'publisher'
         ];
@@ -43,12 +39,14 @@ module.exports = (req, res, next) => {
             'Content-disposition',
             `attachment; filename=${fileData.file}.csv`
           );
-          res.send(json2csv({
-            data: fileData.contents,
-            fields,
-            defaultValue: '',
-            hasCSVColumnTitle: false
-          }));
+          res.send(json2csv.parse(
+            fileData.contents,
+            {
+              fields,
+              defaultValue: '',
+              hasCSVColumnTitle: false
+            }
+          ));
         } catch (e) {
           next(e);
         }

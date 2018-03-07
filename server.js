@@ -25,27 +25,4 @@ app.use((req, res, next) => {
   next(err);
 });
 
-// Development error handler will print stacktrace
-if (app.get('env') === 'development') {
-  app.use((err, req, res) => {
-    logger.error(err);
-    res.status(err.status || 500);
-    res.send({
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// Production error handler
-// No stacktraces leaked to user
-app.use((err, req, res) => {
-  logger.error(err);
-  res.status(err.status || 500);
-  res.send({
-    message: err.message,
-    error: {}
-  });
-});
-
 module.exports = app;

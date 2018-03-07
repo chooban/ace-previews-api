@@ -8,7 +8,7 @@ describe('Export controller', () => {
     process.env.NODE_ENV = 'test';
     // eslint-disable-next-line
     const app = require('../../server');
-    server = app.listen(3000, done);
+    server = app.listen(0, done);
   });
 
   afterEach(() => {
