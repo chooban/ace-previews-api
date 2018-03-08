@@ -12,7 +12,8 @@ jobs:
           key: previews-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
-  test:
+  unit-tests:
+    name: Unit tests
     docker:
       - image: circleci/node:8.9.1
     steps:
@@ -22,8 +23,21 @@ jobs:
       - run:
           command: |
             yarn install
-            yarn test
-  style_check:
+            yarn run unit
+  integrations-tests:
+    name: Integration tests
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run:
+          command: |
+            yarn install
+            yarn run integration
+  style-check:
+    name: Style check
     docker:
       - image: circleci/node:8.9.1
     steps:
@@ -50,7 +64,7 @@ jobs:
       - run: |
           git config --global user.email "rhendry@googlemail.com"
           git config --global user.name "CircleCI"
-          TAG=$(npm version patch -m "Version %s\n\n[ci skip]")
+          TAG=$(npm version patch -m "Version %s [ci skip]")
           docker build -t chooban/ace-previews-api:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push chooban/ace-previews-api:$TAG
@@ -60,15 +74,20 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test:
+      - unit-tests:
+          requires:
+            - build
+      - integration-tests:
           requires:
             - build
       - style_check:
           requires:
             - build
       - docker_image:
+          type: approval
           requires:
-            - test
+            - unit-tests
+            - integration-tests
           filters:
             branches:
               only: master
