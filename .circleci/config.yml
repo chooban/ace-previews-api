@@ -24,7 +24,7 @@ jobs:
           command: |
             yarn install
             yarn run unit
-  integrations-tests:
+  integration-tests:
     name: Integration tests
     docker:
       - image: circleci/node:8.9.1
@@ -80,7 +80,7 @@ workflows:
       - integration-tests:
           requires:
             - build
-      - style_check:
+      - style-check:
           requires:
             - build
       - docker_image:
