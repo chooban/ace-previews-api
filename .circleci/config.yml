@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.1
-    working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
@@ -14,6 +13,14 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn test
+  style_check:
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run: yarn run style
   docker_image:
     docker:
       - image: circleci/node:8.9.1
@@ -25,11 +32,12 @@ jobs:
       - setup_remote_docker:
           version: 17.03.0-ce
       - checkout
-      - run: yarn install
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
       - run: |
           git config --global user.email "rhendry@googlemail.com"
           git config --global user.name "CircleCI"
-          TAG=$(npm version patch -m "[ci skip]")
+          TAG=$(npm version patch -m "Version %s\n\n[ci skip]")
           docker build -t chooban/ace-previews-api:$TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push chooban/ace-previews-api:$TAG
@@ -39,6 +47,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - style_check:
+          requires:
+            - build
       - docker_image:
           requires:
             - build
