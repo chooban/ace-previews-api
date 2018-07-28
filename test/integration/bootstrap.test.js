@@ -1,4 +1,3 @@
-const should = require('should');
 const supertest = require('supertest');
 const mockFs = require('mock-fs');
 
@@ -8,13 +7,13 @@ describe('Bootstrap controller', () => {
   before((done) => {
     // eslint-disable-next-line
     const app = require('../../server');
-    server = app.listen(3000, done);
+    server = app.listen(0, done);
   });
 
   after(() => {
     server.close();
     server = null;
-    mockFs.restore()
+    mockFs.restore();
   });
 
   it('gives empty values if no config is present', (done) => {
@@ -38,7 +37,7 @@ describe('Bootstrap controller with secrets', () => {
     });
     // eslint-disable-next-line
     const app = require('../../server');
-    server = app.listen(3000, done);
+    server = app.listen(0, done);
   });
 
   after(() => {
@@ -56,5 +55,4 @@ describe('Bootstrap controller with secrets', () => {
         clientId: 'client_id'
       }, done);
   });
-
 });

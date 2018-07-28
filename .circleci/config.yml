@@ -1,0 +1,93 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+  unit-tests:
+    name: Unit tests
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run:
+          command: |
+            yarn install
+            yarn run unit
+  integration-tests:
+    name: Integration tests
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run:
+          command: |
+            yarn install
+            yarn run integration
+  style-check:
+    name: Style check
+    docker:
+      - image: circleci/node:8.9.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run:
+          command: |
+            yarn install
+            yarn run style
+  docker_image:
+    docker:
+      - image: circleci/node:8.9.1
+    working_directory: ~/app
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "43:c9:84:a4:1d:d0:04:51:22:3b:23:ef:a0:13:3d:6a"
+      - setup_remote_docker:
+          version: 17.03.0-ce
+      - checkout
+      - restore_cache:
+          key: previews-cache-{{ checksum "yarn.lock" }}
+      - run: |
+          git config --global user.email "rhendry@googlemail.com"
+          git config --global user.name "CircleCI"
+          TAG=$(npm version patch -m "Version %s [ci skip]")
+          docker build -t chooban/ace-previews-api:$TAG .
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker push chooban/ace-previews-api:$TAG
+          git push origin master
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - unit-tests:
+          requires:
+            - build
+      - integration-tests:
+          requires:
+            - build
+      - style-check:
+          requires:
+            - build
+      - docker_image:
+          type: approval
+          requires:
+            - unit-tests
+            - integration-tests
+          filters:
+            branches:
+              only: master

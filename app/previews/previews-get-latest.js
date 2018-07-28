@@ -31,12 +31,14 @@ module.exports = (req, res, next) => {
                   'Content-disposition',
                   `attachment; filename=${issue.file}.csv`
                 );
-                res.send(json2csv({
-                  data: issue.contents,
-                  defaultValue: '',
-                  fields,
-                  hasCSVColumnTitle: false
-                }));
+                res.send(json2csv.parse(
+                  issue.contents,
+                  {
+                    defaultValue: '',
+                    fields,
+                    hasCSVColumnTitle: false
+                  }
+                ));
               } catch (jsonerr) {
                 next(jsonerr);
               }

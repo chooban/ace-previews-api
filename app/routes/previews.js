@@ -18,6 +18,10 @@ router.use((req, res, next) => {
 
 router.get('/', indexHandler);
 router.get('/latest', latestIssueHandler);
-router.get('/:previews_issue', issueRequestHandler);
-router.get('/:previews_issue/:item', itemRequestHandler);
+
+// This is also covered by tests within the handler, but I'll leave it in place
+// in case I do something stupid and remove one
+router.get('/:previews_issue([0-9]{3})', issueRequestHandler);
+router.get('/:previews_issue([0-9]{3})/:item', itemRequestHandler);
+
 module.exports = router;

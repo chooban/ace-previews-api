@@ -1,4 +1,4 @@
-const sprintf = require('sprintf');
+const { sprintf } = require('sprintf-js');
 
 const headers = 'Previews Code,Quantity,Title,Price,Publisher,Comment\n';
 const row = '%s,%d,%s,%s,%s,%s\n';

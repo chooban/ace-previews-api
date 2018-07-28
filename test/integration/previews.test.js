@@ -1,13 +1,13 @@
+/* eslint-disable global-require, no-console */
 const supertest = require('supertest');
-const should = require('should');
 
 describe('Previews controller', () => {
-  let server = undefined;
+  let server;
 
   beforeEach((done) => {
     process.env.DATA_DIR = './acedata/';
     const app = require('../../server');
-    server = app.listen(3000, done);
+    server = app.listen(0, done);
   });
 
   afterEach(() => {
@@ -16,9 +16,9 @@ describe('Previews controller', () => {
     delete process.env.DATA_DIR;
   });
 
-  afterEach(function() {
+  afterEach(function logFailures() {
     if (this.currentTest.state === 'failed') {
-      var logger = require('../../app/util/logger');
+      const logger = require('../../app/util/logger');
       console.log(logger.transports.memory.errorOutput);
       logger.transports.memory.clearLogs();
     }
@@ -32,7 +32,7 @@ describe('Previews controller', () => {
       .end((err, res) => {
         res.status.should.equal(200);
         res.body.should.have.length(4);
-        res.body.should.eql(['332','331','330','100']);
+        res.body.should.eql(['332', '331', '330', '100']);
         done();
       });
   });
