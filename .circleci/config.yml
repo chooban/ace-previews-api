@@ -84,7 +84,6 @@ workflows:
           requires:
             - build
       - docker_image:
-          type: approval
           requires:
             - unit-tests
             - integration-tests
