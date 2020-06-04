@@ -53,9 +53,6 @@ jobs:
       - image: circleci/node:8.9.1
     working_directory: ~/app
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "43:c9:84:a4:1d:d0:04:51:22:3b:23:ef:a0:13:3d:6a"
       - setup_remote_docker:
           version: 17.03.0-ce
       - checkout
