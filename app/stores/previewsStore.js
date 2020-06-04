@@ -129,7 +129,7 @@ function getItemInformation(issueNumber, itemNumber, done) {
 
   const codeToUrl = (issue, item) => {
     const epoch = new Date(1988, 8, 1);
-    epoch.setMonth(epoch.getMonth() + parseInt(issue, 10));
+    epoch.setMonth(epoch.getMonth() + parseInt(issue, 10) + 1); // +1 for coronavirus effect
 
     const slug = MonthNames[epoch.getMonth()] + (epoch.getFullYear() - 2000) + item;
     const url = `${urlPrefix}/Catalog/${slug}`;
